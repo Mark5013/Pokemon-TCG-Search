@@ -1,0 +1,64 @@
+<%- include("header") -%>
+
+<div class="search-space search-space-special .container">
+    <form action="/search" method="POST">
+        <input class="form-control m-auto search-bar" type="search" aria-label="Search" name="searchBar" placeholder="Pokemon Name" autocomplete="off">
+        <button class="btn btn-outline-dark" type="submit" name="search">Search</button>
+    </form>
+</div>
+
+
+<div class="card-page container">
+    <div class="row">
+        <div class="col-lg-6 card-pic-div">
+            <img class="large-img" src="<%= pokemonImg %>" rel="whatever pokemon clicked on">
+        </div>
+        <div class="col-lg-6">
+            <div class="pokemon-info card">
+                <div class="card-header">
+                    <h2 class="card-info-title">Card Info:</h2>
+                </div>
+                <div class="list-group list-group-flush">
+                    <p class="list-group-item">Card ID: <%= cardId %></p>
+                    <p class="list-group-item">Name: <%= pokemonName %></p>
+                    <p class="list-group-item">HP: <%= pokemonHP %></p>
+                    <p class="list-group-item">Type(s): 
+                    <% for(let i = 0; i < pokemonTypes.length; ++i) { %>
+                        <%= pokemonTypes[i] %>
+                <% } %>
+                    </p>
+                    <p class="list-group-item">Evolves from:
+                        <% if(!pokemonFrom.hasOwnProperty("evolvesFrom")) { %>
+                            N/A
+                        <% } else { %>
+                                <%= pokemonEvos.evolvesFrom %>
+                        <% } %>
+                    <p class="list-group-item">Evolves into:
+                    <% if(!pokemonEvos.hasOwnProperty("evolvesTo")) { %>
+                        N/A
+                    <% } else { %>
+                        <% for(let i = 0; i < pokemonEvos.evolvesTo.length; ++i) { %>
+                            <%= pokemonEvos.evolvesTo[i] %>
+                        <% } %>
+                    <% } %>
+                    </p>
+                    <p class="list-group-item">Weaknesse(s):
+                        <% if(!pokemonEvos.hasOwnProperty("weaknesses")) { %>
+                            N/A
+                        <% } else { %>
+                            <% for(let i = 0; i < pokemonWeak.weaknesses.length; ++i) { %>
+                                <%= pokemonWeak.weaknesses[i].type %> | Value: <%= pokemonWeak.weaknesses[i].value %>
+                            <% } %>
+                        <% } %>
+                        </p>
+                    <p class="list-group-item">Rarity: <%= pokemonRarity %></p>
+                    <p class="list-group-item">Card Artist: <%= cardArtist %></p>
+                    <a class="list-group-item list-link" href="<%= tcgLink %>">TCGPlayer</a>
+                    <a class="list-group-item list-link" href="<%= cardMarket %>">Card Market</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include("footer") -%>

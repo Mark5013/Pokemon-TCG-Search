@@ -116,6 +116,7 @@ form {
     transform: scale(1);
     transition: transform 250ms;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    max-width: 200px;
 }
 
 .search-img:hover, .search-img:focus {
@@ -183,7 +184,9 @@ form {
         display: inline-block;
         margin-top: 0;
         padding: .7em;
-    }  
+    } 
+    
+    
 
     .btn {
         position: relative;

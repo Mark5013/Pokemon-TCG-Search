@@ -62,16 +62,10 @@ form {
     padding: 1em;
 }
 
-.search-bar {
-    width: 50%;
-    display: inline-block;
-    margin-top: 0;
-}
 
 .btn {
-    position: relative;
-    bottom: 3px;
-    margin-left: 1em;
+    margin-top: .5em;
+    padding: .6em 1.75em;
 }
 
 
@@ -112,6 +106,10 @@ form {
     text-align: center;
     margin-top: 1em;
     margin-bottom: 1em;
+}
+
+.search-bar {
+    display: block;
 }
 
 .search-img {
@@ -177,6 +175,22 @@ form {
     text-align: center;
     font-weight: 700;
     margin-top: 1em;
+}
+
+@media(min-width: 600px) {
+    .search-bar {
+        width: 50%;
+        display: inline-block;
+        margin-top: 0;
+        padding: .7em;
+    }  
+
+    .btn {
+        position: relative;
+        margin-left: 1em;
+        bottom: 1px;
+        margin-top: 0;
+    }
 }
 
 @media(min-width: 992px) {

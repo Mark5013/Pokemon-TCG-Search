@@ -18,8 +18,9 @@ app.get("/", (req,res) => {
 
 // handles searches by pokemon name
 app.post("/search", (req, res) => {
+    console.log(req.body);
     let pokemonName = req.body.searchBar;
-    
+
     pokemon.card.where({ q: `name:${pokemonName}`}).then(
         result => {
             let dataLength = result.data.length;

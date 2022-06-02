@@ -62,12 +62,10 @@ form {
     padding: 1em;
 }
 
-
-.btn {
+.search-btn {
     margin-top: .5em;
     padding: .6em 1.75em;
 }
-
 
 /* FOOTER */
 
@@ -119,14 +117,18 @@ form {
     max-width: 200px;
 }
 
+.search-btn-img {
+    border: 0;
+    background: transparent;
+}
+
 .search-img:hover, .search-img:focus {
     transform: scale(1.05);
     cursor: pointer;
 }
 
-.search-btn {
-    border: none;
-    background-color: transparent;
+.dropdown-col {
+    order: 2;
 }
 
 /* CARD PAGE */

@@ -36,7 +36,7 @@ app.post("/search", (req, res) => {
 
 // handles users clicking on cards bringing up the cards info page
 app.post("/cardpage", (req, res) => {
-    let pokemonId = req.body.finalBtn;
+    let pokemonId = req.body.cardBtn;
 
     pokemon.card.where({ q: `id:${pokemonId}`}).then(
         result => {
@@ -54,7 +54,6 @@ app.post("/cardpage", (req, res) => {
                 cardArtist: result.data[0].artist,
                 cardId: pokemonId,
             })
-            console.log(result.data);
         }
     )
 

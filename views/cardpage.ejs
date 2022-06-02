@@ -26,15 +26,15 @@
                         <% if(!pokemonHP.hasOwnProperty("hp")) { %>
                                 N/A
                         <% } else { %>
-                            <%= pokemonHP %></p>
+                            <%= pokemonHP.hp %></p>
                         <%  }   %> 
                     <p class="list-group-item">Type(s): 
                         <!-- Check if object has types property and handle accordingly -->
                         <% if(!pokemonTypes.hasOwnProperty("types")) { %>
                                 N/A
                         <%  } else { %>
-                            <% for(let i = 0; i < pokemonTypes.length; ++i) { %>
-                                <%= pokemonTypes[i] %>
+                            <% for(let i = 0; i < pokemonTypes.types.length; ++i) { %>
+                                <%= pokemonTypes.types[i] %>
                             <%  } %>
                        <%   }   %>
                     </p>

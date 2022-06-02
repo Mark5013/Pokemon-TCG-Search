@@ -9,13 +9,13 @@
 
 <div class="search-results container">
     <div class="row gy-1">
-        <% for(let i = 0; i < cardArr.length; ++i ) { %>
+        <% cardArr.forEach(function(e) { %>
             <div class="col-lg-3 col-md-6">
                 <form action="/cardpage" method="POST">
-                    <button type="submit" value="<%= cardArr[i].id %>" name="cardBtn" class="search-btn-img"><img class="search-img" src="<%= cardArr[i].images.small %>" alt="img[i]"></button>
+                    <a href="/cardpage/<%= e.id %>"><img class="search-img" src="<%= e.images.small %>" alt="e.name"></a>
                 </form>
             </div>
-        <% } %>
+        <% }) %>
     </div>   
 </div>
 

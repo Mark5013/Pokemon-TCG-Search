@@ -18,13 +18,13 @@ app.get("/", (req,res) => {
 
 // handles searches by pokemon name
 app.post("/search", (req, res) => {
-    console.log(req.body);
     let pokemonName = req.body.searchBar;
 
     pokemon.card.where({ q: `name:${pokemonName}`}).then(
         result => {
             let dataLength = result.data.length;
             if(dataLength === 0) {
+                //redirect to failure page
                 res.render("failure")
             } else {
                 res.render("search", {
@@ -35,9 +35,9 @@ app.post("/search", (req, res) => {
     )
 })
 
-// handles users clicking on cards bringing up the cards info page
-app.post("/cardpage", (req, res) => {
-    let pokemonId = req.body.cardBtn;
+//dynamically render cardpage based off of cardID
+app.get("/cardpage/:cardID", (req, res) => {
+    let pokemonId = req.params.cardID;
 
     pokemon.card.where({ q: `id:${pokemonId}`}).then(
         result => {
@@ -59,7 +59,6 @@ app.post("/cardpage", (req, res) => {
     )
 
 })
-
 
 app.listen(process.env.PORT || port, (req, res) => {
     console.log(`Listening on port: ${port}`);

@@ -21,19 +21,32 @@
                 <div class="list-group list-group-flush">
                     <p class="list-group-item">Card ID: <%= cardId %></p>
                     <p class="list-group-item">Name: <%= pokemonName %></p>
-                    <p class="list-group-item">HP: <%= pokemonHP %></p>
+                    <p class="list-group-item">HP: 
+                        <!-- Check if object has hp property and handle accordingly -->
+                        <% if(!pokemonHP.hasOwnProperty("hp")) { %>
+                                N/A
+                        <% } else { %>
+                            <%= pokemonHP %></p>
+                        <%  }   %> 
                     <p class="list-group-item">Type(s): 
-                    <% for(let i = 0; i < pokemonTypes.length; ++i) { %>
-                        <%= pokemonTypes[i] %>
-                <% } %>
+                        <!-- Check if object has types property and handle accordingly -->
+                        <% if(!pokemonTypes.hasOwnProperty("types")) { %>
+                                N/A
+                        <%  } else { %>
+                            <% for(let i = 0; i < pokemonTypes.length; ++i) { %>
+                                <%= pokemonTypes[i] %>
+                            <%  } %>
+                       <%   }   %>
                     </p>
                     <p class="list-group-item">Evolves from:
+                        <!-- Check if object has evolvesFrom property and handle accordinly -->
                         <% if(!pokemonFrom.hasOwnProperty("evolvesFrom")) { %>
                             N/A
                         <% } else { %>
                                 <%= pokemonEvos.evolvesFrom %>
                         <% } %>
                     <p class="list-group-item">Evolves into:
+                        <!-- Check if object has evolesTo property and handle accordingly -->
                     <% if(!pokemonEvos.hasOwnProperty("evolvesTo")) { %>
                         N/A
                     <% } else { %>
@@ -43,6 +56,7 @@
                     <% } %>
                     </p>
                     <p class="list-group-item">Weaknesse(s):
+                        <!-- Check if object has weaknesses property and handle accordingly -->
                         <% if(!pokemonEvos.hasOwnProperty("weaknesses")) { %>
                             N/A
                         <% } else { %>

@@ -8,14 +8,15 @@ const port = 3000;
 pokemon.configure({apiKey: `${process.env.apiKey}`})
 
 app.use(bodyParser.urlencoded({extended: true}));
-
+app.use(express.static("public"));
 app.set('view engine', 'ejs');
 
-
+// render home page
 app.get("/", (req,res) => {
     res.render("index");
 });
 
+// handles searches by pokemon name
 app.post("/search", (req, res) => {
     let pokemonName = req.body.searchBar;
     
@@ -33,6 +34,7 @@ app.post("/search", (req, res) => {
     )
 })
 
+// handles users clicking on cards bringing up the cards info page
 app.post("/cardpage", (req, res) => {
     let pokemonId = req.body.finalBtn;
 
@@ -41,8 +43,8 @@ app.post("/cardpage", (req, res) => {
             res.render('cardpage', {
                 pokemonImg: result.data[0].images.large,
                 pokemonName: result.data[0].name,
-                pokemonHP: result.data[0].hp, 
-                pokemonTypes: result.data[0].types,
+                pokemonHP: result.data[0], 
+                pokemonTypes: result.data[0],
                 pokemonFrom: result.data[0],
                 pokemonEvos: result.data[0],
                 pokemonWeak: result.data[0],
@@ -52,12 +54,12 @@ app.post("/cardpage", (req, res) => {
                 cardArtist: result.data[0].artist,
                 cardId: pokemonId,
             })
+            console.log(result.data);
         }
     )
 
 })
 
-app.use(express.static("public"));
 
 app.listen(process.env.PORT || port, (req, res) => {
     console.log(`Listening on port: ${port}`);

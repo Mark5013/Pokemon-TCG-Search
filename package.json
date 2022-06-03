@@ -23,6 +23,7 @@
     "express": "^4.18.1",
     "jquery": "^3.6.0",
     "jsdom": "^19.0.0",
+    "paginate": "^0.2.0",
     "pokemontcgsdk": "^2.0.0"
   }
 }

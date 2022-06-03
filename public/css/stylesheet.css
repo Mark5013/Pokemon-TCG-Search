@@ -258,3 +258,13 @@ form {
         max-width: 600px;
     }
 }
+
+nav {
+    display: inline-block;
+    margin: 0 auto;
+    
+}
+
+.pagination-thing {
+    text-align: center;
+}

@@ -7,3 +7,5 @@ card's info page. When searching by ID, since every ID is unique, you will be ta
 This was created using the pokemon TCG api found at: https://pokemontcg.io/. I used the api to make queries based on the info the user inputed and 
 extract info based on the results. EJS templating was also used to render each page and I used Node.js/Express for the backend. Bootstrap was used
 to easily make the website responsive, and a bit of JS was used on the frontend to create semi-dynamic home images. 
+
+Website is hosted on heroku at: https://whispering-retreat-18765.herokuapp.com/

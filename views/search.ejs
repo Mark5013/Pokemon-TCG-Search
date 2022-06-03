@@ -7,16 +7,18 @@
     </form>
 </div>
 
-<div class="search-results container">
-    <div class="row gy-1">
-        <% cardArr.forEach(function(e) { %>
-            <div class="col-lg-3 col-md-6">
-                <form action="/cardpage" method="POST">
-                    <a href="/cardpage/<%= e.id %>"><img class="search-img" src="<%= e.images.small %>" alt="e.name"></a>
-                </form>
-            </div>
-        <% }) %>
-    </div>   
+<div class="search-results background-img">
+    <div class="container">
+        <div class="row gy-1">
+            <% cardArr.forEach(function(e) { %>
+                <div class="col-lg-3 col-md-6">
+                    <form action="/cardpage" method="POST">
+                        <a href="/cardpage/<%= e.id %>"><img class="search-img" src="<%= e.images.small %>" alt="e.name"></a>
+                    </form>
+                </div>
+            <% }) %>
+        </div>   
+    </div>
 </div>
 
 <%- include("footer") -%>

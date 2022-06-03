@@ -7,6 +7,9 @@ body {
     box-sizing: border-box;
 }
 
+
+/* GENERAL */
+
 .home-btn {
     text-decoration: none;
     transition: color 250ms;
@@ -22,6 +25,12 @@ body {
 .home-pg-img {
     margin-top: 3em;
     max-width: 500px;
+}
+
+.background-img {
+    background-image: url(/images/background-img.png);
+    margin: 0;
+    border: 1px solid transparent;
 }
 
 /* TYPOGRAPHY */
@@ -57,11 +66,11 @@ body {
 .search-space {
     text-align: center;
     padding: 0 5em 10em 5em;
-    background-color: #efefef;
 }
 
 .search-space-special {
     padding: 0;
+    background-image: linear-gradient(#d7e1ec,#ffffff);
 }
 
 form {
@@ -76,7 +85,8 @@ form {
 /* FOOTER */
 
 .footer {
-    background-color: #d7d7d7;
+    background: linear-gradient(#F5F7FA, #B8C6DB);
+    opacity: .6;
     padding: 5em 5em;
     text-align: center;
     font-size: .75em;
@@ -104,16 +114,21 @@ form {
     opacity: 1;
 }
 
+
 /* SEARCH PAGE */
 
 .search-results {
     text-align: center;
-    margin-top: 1em;
-    margin-bottom: 1em;
 }
 
 .search-bar {
     display: block;
+    transform: scale(1);
+    transition: transform 250ms;
+}
+
+.search-bar:hover, .search-bar:focus {
+    transform: scale(1.03);
 }
 
 .search-img {
@@ -172,6 +187,10 @@ form {
 .failure-page {
     padding: 0 5em 10em 5em;
     text-align: center;
+}
+
+.failure-search-space {
+    background-image: none;
 }
 
 .fail-img {

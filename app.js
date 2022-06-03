@@ -14,25 +14,48 @@ app.set('view engine', 'ejs');
 // render home page
 app.get("/", (req,res) => {
     res.render("index");
+    res.end();
 });
 
 // handles searches by pokemon name
 app.post("/search", (req, res) => {
     let pokemonName = req.body.searchBar;
 
-    pokemon.card.where({ q: `name:${pokemonName}`}).then(
-        result => {
-            let dataLength = result.data.length;
-            if(dataLength === 0) {
-                //redirect to failure page
-                res.render("failure")
-            } else {
-                res.render("search", {
-                    cardArr: result.data,
-                })
+    //MAKRE SURE USER INPUT DOESN'T CRASH API QUERY
+    if(!(/^[A-Za-z0-9-]*$/.test(pokemonName))) { 
+        res.redirect("failure");
+    } else if(pokemonName.includes('-')) {
+        //HANDLES SEARCH BY ID
+        pokemon.card.where({ q: `id:${pokemonName}`}).then(
+            result => {
+                //check if pokemon was found
+                let dataLength = result.data.length;
+                if(dataLength === 0) {
+                    res.render("failure");
+                    res.end();
+                } else {
+                    res.redirect(`/cardpage/${pokemonName}`);
+                }
             }
-        }
-    )
+        );
+    } else  {
+        // HANDLES SEARCH BY NAME
+        pokemon.card.where({ q: `name:${pokemonName}`}).then(
+            result => {
+                // check if pokemon was found
+                let dataLength = result.data.length;
+                if(dataLength === 0) {
+                    res.render("failure");
+                    res.end();
+                } else {
+                    res.render("search", {
+                        cardArr: result.data,
+                    });
+                    res.end();
+                }
+            }
+        );
+    }
 })
 
 //dynamically render cardpage based off of cardID
@@ -54,10 +77,15 @@ app.get("/cardpage/:cardID", (req, res) => {
                 cardMarket: result.data[0].cardmarket.url,
                 cardArtist: result.data[0].artist,
                 cardId: pokemonId,
-            })
+            });
+            res.end();
         }
     )
 
+})
+
+app.get("/failure", (req, res) => {
+    res.render("failure");
 })
 
 app.listen(process.env.PORT || port, (req, res) => {

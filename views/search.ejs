@@ -13,7 +13,7 @@
             <% for(let i = startIndex; i < endIndex; ++i) { %>
                 <div class="col-lg-3 col-md-6">
                     <form action="/cardpage" method="POST">
-                        <a href="/cardpage/<%= cardArr[i].id %>"><img class="search-img" src="<%= cardArr[i].images.small %>" alt="e.name"></a>
+                        <a href="/cardpage/<%= cardArr[i].id %>"><img class="search-img" src="<%= cardArr[i].images.small %>" alt="<%=cardArr[i].name%>"></a>
                     </form>
                 </div>
             <% } %>

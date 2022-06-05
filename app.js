@@ -47,12 +47,14 @@ app.post("/search/:page", (req, res) => {
     // Update end index to 24 after start index
     let endIndex = startIndex + 24;
 
+    console.log(!(/^[A-Za-z0-9- ]*$/.test(searchEntry)));
+
     //MAKRE SURE USER INPUT DOESN'T CRASH API QUERY
     if(!(/^[A-Za-z0-9-]*$/.test(searchEntry))) { 
         //Redirect to failure page based off of invalid input
-        res.redirect("failure");
-        //Check if search entry is undefined or doesn't include - symbol
-    } else if(searchEntry === undefined || !searchEntry.includes('-')) {
+        res.redirect("/failure");
+        //Check if search entry doesn't include - symbol
+    } else if(!searchEntry.includes('-')) {
         // HANDLES SEARCH BY NAME
         pokemon.card.where({ q: `name:${searchEntry}`}).then(
             result => {

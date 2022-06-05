@@ -1,7 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import pokemon from 'pokemontcgsdk';
-import paginate from 'paginate';
 
 const app = express();
 const port = 3000;
@@ -9,6 +8,10 @@ pokemon.configure({apiKey: `${process.env.apiKey}`})
 
 //used to store most recent search from user
 let curPokemon ="";
+let latestEndIndex;
+let latestStartIndex;
+let latestActiveBtn;
+let curStyle = "images";
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
@@ -48,35 +51,70 @@ app.post("/search/:page", (req, res) => {
     let endIndex = startIndex + 24;
 
     //MAKRE SURE USER INPUT DOESN'T CRASH API QUERY
-    if(!(/^[A-Za-z0-9-]*$/.test(searchEntry))) { 
+    if(!(/^[A-Za-z0-9- ]*$/.test(searchEntry))) { 
         //Redirect to failure page based off of invalid input
         res.redirect("/failure");
         //Check if search entry doesn't include - symbol
     } else if(!searchEntry.includes('-')) {
-        // HANDLES SEARCH BY NAME
-        pokemon.card.where({ q: `name:${searchEntry}`}).then(
-            result => {
-                // check if pokemon was found
-                let numOfResults = result.data.length;
-                // make sure end index doesn't go out of bounds of arr returned
-                if(endIndex > numOfResults) {endIndex = numOfResults;}
-                // render failure page if no results found
-                if(numOfResults === 0) {
-                    res.render("failure");
-                    res.end();
-                //render page based off of search results
-                } else {
-                    res.render("search", {
-                        cardArr: result.data,
-                        numOfResults: numOfResults,
-                        startIndex: startIndex,
-                        endIndex: endIndex,
-                        activeBtn: req.body.nextBtn,
-                    });
-                    res.end();
+        if(curStyle === "list") {
+            pokemon.card.where({ q: `name:${curPokemon}`}).then(
+                result => {
+                    // check if pokemon was found
+                    let numOfResults = result.data.length;
+                    // make sure end index doesn't go out of bounds of arr returned
+                    if(latestEndIndex > numOfResults) {latestEndIndex = numOfResults;}
+                    latestStartIndex = startIndex;
+                    latestEndIndex = endIndex;
+                    latestActiveBtn = req.body.nextBtn;
+                    // render failure page if no results found
+                    if(numOfResults === 0) {
+                        res.render("failure");
+                        res.end();
+                    //render page based off of search results
+                    } else {
+                        res.render("listLayout", {
+                            curName: curPokemon,
+                            cardArr: result.data,
+                            numOfResults: numOfResults,
+                            startIndex: latestStartIndex,
+                            endIndex: latestEndIndex,
+                            activeBtn: latestActiveBtn,
+                        });
+                        res.end();
+                    }
                 }
-            }
-        );
+            );  
+        } else {
+            // HANDLES SEARCH BY NAME
+            pokemon.card.where({ q: `name:${searchEntry}`}).then(
+                result => {
+                    // check if pokemon was found
+                    let numOfResults = result.data.length;
+                    // make sure end index doesn't go out of bounds of arr returned
+                    if(endIndex > numOfResults) {endIndex = numOfResults;}
+                    latestStartIndex = startIndex;
+                    latestEndIndex = endIndex;
+                    latestActiveBtn = req.body.nextBtn;
+                    
+                    // render failure page if no results found
+                    if(numOfResults === 0) {
+                        res.render("failure");
+                        res.end();
+                    //render page based off of search results
+                    } else {
+                        res.render("search", {
+                            curName: searchEntry,
+                            cardArr: result.data,
+                            numOfResults: numOfResults,
+                            startIndex: startIndex,
+                            endIndex: endIndex,
+                            activeBtn: req.body.nextBtn,
+                        });
+                        res.end();
+                    }
+                }
+            );
+        }
     } else  {
         //HANDLES SEARCH BY ID
         pokemon.card.where({ q: `id:${searchEntry}`}).then(
@@ -92,9 +130,9 @@ app.post("/search/:page", (req, res) => {
                 res.redirect(`/cardpage/${searchEntry}`);
             }
         }
-);
+        );
     }
-})
+});
 
 //dynamically render cardpage based off of cardID
 app.get("/cardpage/:cardID", (req, res) => {
@@ -124,14 +162,72 @@ app.get("/cardpage/:cardID", (req, res) => {
         }
     )
 
-})
+});
+
+// HANDLE PAGE LAYOUT
+app.post("/pageStyle", (req, res) => {
+    if(req.body.hasOwnProperty("imageBtn")) {
+        curStyle = "images";
+        pokemon.card.where({ q: `name:${curPokemon}`}).then(
+            result => {
+                // check if pokemon was found
+                let numOfResults = result.data.length;
+                // make sure end index doesn't go out of bounds of arr returned
+                if(latestEndIndex > numOfResults) {latestEndIndex = numOfResults;}
+                // render failure page if no results found
+                if(numOfResults === 0) {
+                    res.render("failure");
+                    res.end();
+                //render page based off of search results
+                } else {
+                    res.render("search", {
+                        curName: curPokemon,
+                        cardArr: result.data,
+                        numOfResults: numOfResults,
+                        startIndex: latestStartIndex,
+                        endIndex: latestEndIndex,
+                        activeBtn: latestActiveBtn,
+                    });
+                    res.end();
+                }
+            }
+        ); 
+    } else {
+        //TODO: HANDLE LIST VIEW
+        curStyle = "list";
+        pokemon.card.where({ q: `name:${curPokemon}`}).then(
+            result => {
+                // check if pokemon was found
+                let numOfResults = result.data.length;
+                // make sure end index doesn't go out of bounds of arr returned
+                if(latestEndIndex > numOfResults) {latestEndIndex = numOfResults;}
+                // render failure page if no results found
+                if(numOfResults === 0) {
+                    res.render("failure");
+                    res.end();
+                //render page based off of search results
+                } else {
+                    res.render("listLayout", {
+                        curName: curPokemon,
+                        cardArr: result.data,
+                        numOfResults: numOfResults,
+                        startIndex: latestStartIndex,
+                        endIndex: latestEndIndex,
+                        activeBtn: latestActiveBtn,
+                    });
+                    res.end();
+                }
+            }
+        ); 
+    }
+});
 
 app.get("/failure", (req, res) => {
     res.render("failure");
-})
+});
 
 app.listen(process.env.PORT || port, (req, res) => {
     console.log(`Listening on port: ${port}`);
-})
+});
 
 

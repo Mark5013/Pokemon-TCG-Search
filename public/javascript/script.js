@@ -8,3 +8,4 @@ if(img !== null) {
     img.src = imgArr[today.getDay()];
 }
 
+

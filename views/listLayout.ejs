@@ -18,19 +18,53 @@
     </form>
 </div>
 
-<div class="search-results background-img">
-    <div class="container">
-        <div class="row gy-1">
-            <% for(let i = startIndex; i < endIndex; ++i) { %>
-                <div class="col-lg-3 col-md-6">
-                    <form action="/cardpage" method="POST">
-                        <a href="/cardpage/<%= cardArr[i].id %>"><img class="search-img" src="<%= cardArr[i].images.small %>" alt="<%=cardArr[i].name%>"></a>
-                    </form>
-                </div>
-            <% } %>
-        </div>   
-    </div>
-    <div class="pagination-thing">
+<table class="table table-responsive table-bordered">
+    <thead>
+      <tr>
+        <th>Card ID</th>
+        <th>Card Name</th>
+        <th>Type(s)</th>
+        <th>Weaknesse(s)</th>
+        <th>HP</th>
+        <th>Rarity</th>
+      </tr>
+    </thead>
+    <tbody>
+        <% for(let i = startIndex; i < endIndex; ++i) { %>
+            <tr>
+                <th scope="row"><%=cardArr[i].id%></th>
+                <td><%=cardArr[i].name%></td>
+                <td><% if(!cardArr[i].hasOwnProperty("types")) { %>
+                            N/A
+                    <%  } else { %>
+                        <% for(let j = 0; j < cardArr[i].types.length; ++j) { %>
+                            <%= cardArr[i].types[j] %>
+                        <%  } %>
+                    <%  } %>
+                </td>
+                <td><% if(!cardArr[i].hasOwnProperty("weaknesses")) { %>
+                        N/A
+                    <% } else { %>
+                        <% for(let k = 0; k < cardArr[i].weaknesses.length; ++k) { %>
+                            <%= cardArr[i].weaknesses[k].type %> 
+                        <% } %>
+                    <% } %>
+                </td>
+                <td><% if(!cardArr[i].hasOwnProperty("hp")) { %>
+                        N/A
+                    <% } else { %>
+                        <%= cardArr[i].hp %>
+                    <%  }   %> 
+                </td>
+                <td>
+                    <%= cardArr[i].rarity %>
+                </td>
+            </tr>
+        <% } %>
+    </tbody>
+  </table>
+
+<div class="pagination-thing">
     <nav aria-label="Page navigation example">
         <ul class="pagination">
             <form class="pagination-form pagination" action="/search/:page" method="POST">
@@ -47,7 +81,5 @@
             </form>
         </ul>
       </nav>
-    </div>
 </div>
-
 <%- include("footer") -%>

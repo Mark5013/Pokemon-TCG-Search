@@ -51,7 +51,7 @@ app.post("/search/:page", (req, res) => {
     let endIndex = startIndex + 24;
 
     //MAKRE SURE USER INPUT DOESN'T CRASH API QUERY
-    if(!(/^[A-Za-z0-9- ]*$/.test(searchEntry))) { 
+    if(!(/^[A-Za-z0-9-]*$/.test(searchEntry))) { 
         //Redirect to failure page based off of invalid input
         res.redirect("/failure");
         //Check if search entry doesn't include - symbol

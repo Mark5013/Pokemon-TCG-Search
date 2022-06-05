@@ -47,8 +47,6 @@ app.post("/search/:page", (req, res) => {
     // Update end index to 24 after start index
     let endIndex = startIndex + 24;
 
-    console.log(!(/^[A-Za-z0-9- ]*$/.test(searchEntry)));
-
     //MAKRE SURE USER INPUT DOESN'T CRASH API QUERY
     if(!(/^[A-Za-z0-9-]*$/.test(searchEntry))) { 
         //Redirect to failure page based off of invalid input
@@ -91,7 +89,7 @@ app.post("/search/:page", (req, res) => {
                 res.end();
                 //render card info page for id
             } else {
-                res.redirect(`/cardpage/${searchEntry}}`);
+                res.redirect(`/cardpage/${searchEntry}`);
             }
         }
 );

@@ -62,7 +62,7 @@ app.post("/search/:page", (req, res) => {
                     // check if pokemon was found
                     let numOfResults = result.data.length;
                     // make sure end index doesn't go out of bounds of arr returned
-                    if(latestEndIndex > numOfResults) {latestEndIndex = numOfResults;}
+                    if(endIndex > numOfResults) {endIndex = numOfResults;}
                     latestStartIndex = startIndex;
                     latestEndIndex = endIndex;
                     latestActiveBtn = req.body.nextBtn;
@@ -70,7 +70,7 @@ app.post("/search/:page", (req, res) => {
                     if(numOfResults === 0) {
                         res.render("failure");
                         res.end();
-                    //render page based off of search results
+                    //render page based off of search results IN LIST FORMAT BASED OFF OF CURSTYLE
                     } else {
                         res.render("listLayout", {
                             curName: curPokemon,
@@ -95,12 +95,11 @@ app.post("/search/:page", (req, res) => {
                     latestStartIndex = startIndex;
                     latestEndIndex = endIndex;
                     latestActiveBtn = req.body.nextBtn;
-                    
                     // render failure page if no results found
                     if(numOfResults === 0) {
                         res.render("failure");
                         res.end();
-                    //render page based off of search results
+                    //render page based off of search results IN IMAGE FORMAT BASED OFF OF CURSTYLE
                     } else {
                         res.render("search", {
                             curName: searchEntry,
@@ -178,7 +177,7 @@ app.post("/pageStyle", (req, res) => {
                 if(numOfResults === 0) {
                     res.render("failure");
                     res.end();
-                //render page based off of search results
+                //render page based off of search results IN IMAGE FORMAT 
                 } else {
                     res.render("search", {
                         curName: curPokemon,
@@ -205,7 +204,7 @@ app.post("/pageStyle", (req, res) => {
                 if(numOfResults === 0) {
                     res.render("failure");
                     res.end();
-                //render page based off of search results
+                //render page based off of search results IN LIST FORMAT
                 } else {
                     res.render("listLayout", {
                         curName: curPokemon,

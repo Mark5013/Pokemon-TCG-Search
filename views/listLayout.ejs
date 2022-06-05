@@ -30,9 +30,12 @@
       </tr>
     </thead>
     <tbody>
+        <!-- DISPLAYS SEARCH PAGE IN LIST FORMAT -->
         <% for(let i = startIndex; i < endIndex; ++i) { %>
             <tr>
-                <th scope="row"><%=cardArr[i].id%></th>
+                <th scope="row"><span class="img-hover-text"><a class="list-card-link"href="/cardpage/<%= cardArr[i].id %>"><%=cardArr[i].id%></a></span>
+                    <img class="hidden-img" src="<%=cardArr[i].images.small%>" alt="<%=cardArr[i].name%>">
+                </th>
                 <td><%=cardArr[i].name%></td>
                 <td><% if(!cardArr[i].hasOwnProperty("types")) { %>
                             N/A

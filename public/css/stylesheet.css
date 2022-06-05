@@ -191,6 +191,21 @@ form {
     font-size: 1.25em;
 }
 
+.hidden-img {
+    display: none;
+}
+
+.img-hover-text:hover + .hidden-img {
+    display: block;
+    position: absolute;
+
+}
+
+.list-card-link {
+    text-decoration: none;
+    color: black;
+}
+
 /* Failure page */
 
 .failure-page {

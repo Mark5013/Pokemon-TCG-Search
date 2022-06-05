@@ -60,6 +60,7 @@ app.post("/search/:page", (req, res) => {
             pokemon.card.where({ q: `name:${curPokemon}`}).then(
                 result => {
                     // check if pokemon was found
+                    
                     let numOfResults = result.data.length;
                     // make sure end index doesn't go out of bounds of arr returned
                     if(endIndex > numOfResults) {endIndex = numOfResults;}

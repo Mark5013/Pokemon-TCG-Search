@@ -1,13 +1,13 @@
 <%- include("header") -%>
 
-<div class="search-space search-space-special .container">
+<div class="search-space search-space-special .container list-search-space">
     <form class="search-form" action="/search/1" method="POST">
         <input class="form-control m-auto search-bar" type="search" aria-label="Search" name="searchBar" placeholder="Card Name/Card ID/Card Tier" autocomplete="off" required>
-        <button class="btn search-btn btn-outline-primary" type="submit" name="search">Search</button>
+        <button class="btn search-btn btn-outline-dark" type="submit" name="search">Search</button>
     </form>
     <form class="view-form" action="/pageStyle" method="POST">
         <div class="btn-group">
-            <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <button type="button" class="btn btn-outline-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
               View as
             </button>
             <ul class="dropdown-menu">
@@ -18,7 +18,7 @@
     </form>
 </div>
 
-<table class="table table-responsive table-bordered">
+<table class="table table-responsive table-bordered table-dark">
     <thead>
       <tr>
         <th>Card ID</th>
@@ -32,10 +32,10 @@
     <tbody>
         <!-- DISPLAYS SEARCH PAGE IN LIST FORMAT -->
         <% for(let i = startIndex; i < endIndex; ++i) { %>
-            <tr>
-                <th scope="row"><span class="img-hover-text"><a class="list-card-link"href="/cardpage/<%= cardArr[i].id %>"><%=cardArr[i].id%></a></span>
+            <tr class="list-text">
+                <td><span class="img-hover-text"><a class="list-card-link"href="/cardpage/<%= cardArr[i].id %>"><%=cardArr[i].id%> </a> <img class="set-symbol" src="<%=cardArr[i].set.images.symbol%>" alt="set symbol"></span>
                     <img class="hidden-img" src="<%=cardArr[i].images.small%>" alt="<%=cardArr[i].name%>">
-                </th>
+                </td>
                 <td><%=cardArr[i].name%></td>
                 <td><% if(!cardArr[i].hasOwnProperty("types")) { %>
                             N/A
@@ -67,18 +67,18 @@
     </tbody>
   </table>
 
-<div class="pagination-thing">
+<div class="pagination-thing pagination-background">
     <nav aria-label="Page navigation example">
         <ul class="pagination">
             <form class="pagination-form pagination" action="/search/:page" method="POST">
             <% for(let i = 0; i < Math.ceil(numOfResults / 24); ++i) { %>
                 <% if(Number(activeBtn) === Number(i+1)) { %>
-                    <li class="page-item"><button class="page-link active btn pagination-btn" name="nextBtn" value="<%=i+1%>"><%= i + 1 %></button></li> 
+                    <li class="page-item"><button class="page-link page-link-list active btn pagination-btn list-pagination-btn" name="nextBtn" value="<%=i+1%>"><span class="pls"><%= i + 1 %></span></button></li> 
                 <%  } else if(activeBtn === undefined) { %>
-                    <li class="page-item"><button class="page-link active btn pagination-btn" name="nextBtn" value="<%=i+1%>"><%= i + 1 %></button></li> 
+                    <li class="page-item"><button class="page-link page-link-list active btn pagination-btn list-pagination-btn" name="nextBtn" value="<%=i+1%>"><span class="pls"><%= i + 1 %></span></button></li> 
                     <%activeBtn = -1;%>
                 <%  } else { %>
-                    <li class="page-item"><button class="page-link btn pagination-btn" name="nextBtn" value="<%=i+1%>"><%= i + 1 %></button></li>
+                    <li class="page-item"><button class="page-link page-link-list btn pagination-btn list-pagination-btn" name="nextBtn" value="<%=i+1%>"><%= i + 1 %></button></li>
                 <% } %>
             <%}%>
             </form>

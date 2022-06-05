@@ -156,9 +156,72 @@ form {
     cursor: pointer;
 }
 
-.dropdown-col {
-    order: 2;
+.list-link {
+    text-decoration: underline;
+    color: blue;
 }
+
+.list-group-item {
+    font-size: 1.25em;
+}
+
+.hidden-img {
+    display: none;
+}
+
+.img-hover-text:hover + .hidden-img {
+    display: block;
+    position: absolute;
+    z-index: 999;
+}
+
+.list-card-link {
+    text-decoration: none;
+    color: white;
+}
+
+.table {
+    margin-bottom: 0;
+    background: #050A30;
+}
+
+.set-symbol {
+    width: 25px;
+}
+
+.pagination-background {
+    background-color: #2f4353;
+    background-image: linear-gradient(360deg,#2f4353 0%, #d2ccc4 74%);
+}
+
+.list-text {
+    color: white;
+}
+
+nav {
+    display: inline-block;
+    margin: 0 auto;
+    
+}
+
+.pagination-thing {
+    text-align: center;
+}
+
+.list-search-space {
+    background-color: #2f4353;
+    background-image: linear-gradient(180deg, #2f4353 0%, #d2ccc4 74%);
+}
+
+.page-link-list {
+    background-color: black;
+    color: white;
+}
+
+.list-pagination-btn:hover, .list-pagination-btn:focus {
+    color: black;
+}
+
 
 /* CARD PAGE */
 
@@ -180,30 +243,6 @@ form {
 .card-info-title {
     font-size: 2.5rem;
     font-weight: 700;
-}
-
-.list-link {
-    text-decoration: underline;
-    color: blue;
-}
-
-.list-group-item {
-    font-size: 1.25em;
-}
-
-.hidden-img {
-    display: none;
-}
-
-.img-hover-text:hover + .hidden-img {
-    display: block;
-    position: absolute;
-
-}
-
-.list-card-link {
-    text-decoration: none;
-    color: black;
 }
 
 /* Failure page */
@@ -281,12 +320,6 @@ form {
     }
 }
 
-nav {
-    display: inline-block;
-    margin: 0 auto;
-    
-}
 
-.pagination-thing {
-    text-align: center;
-}
+
+

@@ -72,7 +72,7 @@ passport.use(new GoogleStrategy({
     callbackURL: "https://whispering-retreat-18765.herokuapp.com/auth/google/pokemon"
   },
   function(accessToken, refreshToken, profile, cb) {
-    Collection.findOrCreate({ googleId: profile.id, username: profile.emails[0].value}, function (err, user) {
+    Collection.findOrCreate({ googleId: profile.id}, function (err, user) {
       return cb(err, user);
     });
   }

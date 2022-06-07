@@ -25,8 +25,8 @@
         <th>Card Name</th>
         <th>Type(s)</th>
         <th>Weaknesse(s)</th>
-        <th>HP</th>
         <th>Rarity</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -53,14 +53,14 @@
                         <% } %>
                     <% } %>
                 </td>
-                <td><% if(!cardArr[i].hasOwnProperty("hp")) { %>
-                        N/A
-                    <% } else { %>
-                        <%= cardArr[i].hp %>
-                    <%  }   %> 
-                </td>
                 <td>
                     <%= cardArr[i].rarity %>
+                </td>
+                <td>
+                    <form action="/addToCollection" method="POST">
+                        <button type="submit" name="addBtn" value="<%=cardArr[i].id%>">Add</button>
+                        <input type="hidden" name="cardImg" value="<%=cardArr[i].images.small%>">
+                    </form>
                 </td>
             </tr>
         <% } %>

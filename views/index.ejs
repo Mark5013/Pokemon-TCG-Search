@@ -11,7 +11,19 @@
         </div>
     </div>
     <img class="home-pg-img" src="" rel="dynamicish pokemon images">
+    
 </div>
-
-
+<div class="login-section">
+    <% if(loggedIn) { %>
+        <a class="btn btn-light btn-lg" href="/logout" role="button">Log Out</a>
+   <% } else { %>
+        <a class="btn btn-block btn-social btn-google" href="/auth/google" role="button">
+            <i class="fab fa-google"></i>
+            Sign Up with Google
+        </a>
+   <% } %>
+    <a class="btn btn-outline-primary" href="/collection" role="button">
+        My collection
+    </a>
+</div>
 <%- include("footer") -%>

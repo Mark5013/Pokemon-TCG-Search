@@ -6,7 +6,7 @@ body {
 * {
     box-sizing: border-box;
 }
-
+/* TODO ORGANIZE CSS */
 
 /* GENERAL */
 
@@ -65,7 +65,7 @@ body {
 
 .search-space {
     text-align: center;
-    padding: 0 5em 10em 5em;
+    padding: 0 5em 3em 5em;
 }
 
 .search-space-special {
@@ -321,5 +321,19 @@ nav {
 }
 
 
+.login-section {
+    text-align: center;
+    padding: 2em;
+}
 
 
+.logout-collection {
+    text-align: left;
+    padding: 3em 0 3em 0;
+    
+}
+
+.logout-btn {
+    width: 7em;
+    margin: 0 auto;
+}

@@ -39,20 +39,22 @@ app.use(passport.initialize());
 // tell pasport to deal with sessions
 app.use(passport.session());
 
-// mongoose.connect(`mongodb+srv://admin-mark:${password}@cluster0.vgavw.mongodb.net/collectionDB`);
-mongoose.connect("mongodb://localhost:27017/collectionDB");
+mongoose.connect(`mongodb+srv://admin-mark:${password}@cluster0.vgavw.mongodb.net/collectionDB`);
+// mongoose.connect("mongodb://localhost:27017/collectionDB");
 
+// collection schema
 const  collectionSchema = new mongoose.Schema({
     username: String,
     googleId: String,
     cards: [{cardId: String, cardImg: String}]
 });
 
-// hash and salt password and save in DB
+// magic
 collectionSchema.plugin(passportLocalMongose);
 collectionSchema.plugin(findOrCreate);
 
 const Collection = new mongoose.model("Collection", collectionSchema);
+
 //create login strategy
 passport.use(Collection.createStrategy());
 
@@ -71,8 +73,8 @@ passport.deserializeUser(function(user, cb) {
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    // callbackURL: "https://whispering-retreat-18765.herokuapp.com/auth/google/pokemon"
-    callbackURL: "http://localhost:3000/auth/google/pokemon"
+    callbackURL: "https://whispering-retreat-18765.herokuapp.com/auth/google/pokemon"
+    // callbackURL: "http://localhost:3000/auth/google/pokemon"
   },
   function(accessToken, refreshToken, profile, cb) {
     Collection.findOrCreate({ username: profile.displayName, googleId: profile.id}, function (err, user) {
@@ -90,6 +92,7 @@ app.get("/", (req,res) => {
     }  
 });
 
+// google auth authentication
 app.get("/auth/google", passport.authenticate('google', {
     scope: ['profile']
 }));
@@ -102,20 +105,34 @@ app.get('/auth/google/pokemon',
     
 });
 
+// renders users collection page
 app.get("/collection", (req, res) => {
+    // vars to keep track of pagination
+    let startIndex = 0;
+    let endIndex = 24;
+    let activeBtn = 1;
+
     if(req.isAuthenticated()) {
         Collection.findById(req.user.id, function(err, doc) {
             if(err) {
                 console.log(err);
             } else {
-                res.render("collection", {cardArr: doc.cards});
+                if(endIndex > doc.cards.length) {endIndex = doc.cards.length;}
+                res.render("collection", {
+                    cardArr: doc.cards, 
+                    startIndex: startIndex, 
+                    endIndex: endIndex,
+                    numOfResults: doc.cards.length,
+                    activeBtn: activeBtn,
+                });
             }
-        })
+        });
     } else {
         res.redirect("/");
     }
 });
 
+// logs user out
 app.get("/logout", (req, res) => {
     req.logout(function(err) {
         if(err) {
@@ -126,23 +143,105 @@ app.get("/logout", (req, res) => {
     });
 });
 
+// render failure page
+app.get("/failure", (req, res) => {
+    res.render("failure");
+});
+
+//dynamically render cardpage based off of cardID
+app.get("/cardpage/:cardID", (req, res) => {
+    let inCollection = false;
+
+    // if user is logged in, then it will check if card is in collection or not 
+    if(req.session.hasOwnProperty("passport")) {
+        const id = req.session.passport.user.id;
+        Collection.find({"_id": id, "cards.cardId": req.params.cardID}, function(err, docs) {
+            if(err) {
+                console.log(err);
+            } else if(docs.length === 1) {
+                inCollection = true;
+            } else {
+                inCollection = false;
+            }
+        });
+    };
+
+    let pokemonId = req.params.cardID;
+
+    pokemon.card.where({ q: `id:${pokemonId}`}).then(
+        result => {
+            if(result.data.length === 0) {
+                res.render("failure")
+            } else {
+                res.render('cardpage', {
+                    pokemonImg: result.data[0].images,
+                    pokemonName: result.data[0].name,
+                    pokemonHP: result.data[0], 
+                    pokemonTypes: result.data[0],
+                    pokemonFrom: result.data[0],
+                    pokemonEvos: result.data[0],
+                    pokemonWeak: result.data[0],
+                    pokemonRarity: result.data[0].rarity,
+                    tcgLink: result.data[0].tcgplayer.url,
+                    cardMarket: result.data[0].cardmarket.url,
+                    cardArtist: result.data[0].artist,
+                    cardId: pokemonId,
+                    inCollection: inCollection
+                });
+                res.end();
+            }
+        }
+    );
+
+});
+
+// adds card to users collection and redirects to collection on success and home page if user isn't logged in
 app.post("/addToCollection", (req, res) => {
     if(req.isAuthenticated()) {
         let cardId = req.body.addBtn;
         let cardImg = req.body.cardImg;
         const userId = req.user.id;
+        // finds user with matching id and pushes card into their card arr
         Collection.findByIdAndUpdate(userId, {$push: {"cards":{cardId: cardId, cardImg: cardImg}}}, {new: true}, function(err, doc) {
             if(err) {
                 console.log(err);
-            } else {
-                console.log(doc);
-                res.render("collection", {cardArr: doc.cards});     
+            } else { 
+                res.redirect("/collection");   
             }
         });
     } else {
         res.redirect("/");
     }
 });
+
+// renders collection page but handles pagination 
+app.post("/collection/:page", (req, res) => {
+    let startIndex = 0;
+
+    if(req.body.hasOwnProperty("nextBtn")) {
+        startIndex = (req.body.nextBtn - 1) * 24;
+    }
+
+    let endIndex = startIndex + 24;
+    let id = req.session.passport.user.id;
+    let activeBtn = req.body.nextBtn;
+
+    Collection.findById(id, function(err, doc) {
+        if(err) {
+            console.log(err);
+        } else {
+            if(endIndex > doc.cards.length) {endIndex = doc.cards.length;}
+            res.render("collection", {
+                cardArr: doc.cards, 
+                startIndex: startIndex, 
+                endIndex: endIndex,
+                numOfResults: doc.cards.length,
+                activeBtn: activeBtn,
+            });
+        }
+    });    
+})
+
 
 // handles searches by pokemon name
 app.post("/search/:page", (req, res) => {
@@ -254,52 +353,8 @@ app.post("/search/:page", (req, res) => {
     }
 });
 
-//dynamically render cardpage based off of cardID
-app.get("/cardpage/:cardID", (req, res) => {
-    let inCollection = false;
 
-    if(req.session.hasOwnProperty("passport")) {
-        const id = req.session.passport.user.id;
-        Collection.find({"_id": id, "cards.cardId": req.params.cardID}, function(err, docs) {
-            if(err) {
-                console.log(err);
-            } else if(docs.length === 1) {
-                inCollection = true;
-            } else {
-                inCollection = false;
-            }
-        });
-    };
-
-    let pokemonId = req.params.cardID;
-
-    pokemon.card.where({ q: `id:${pokemonId}`}).then(
-        result => {
-            if(result.data.length === 0) {
-                res.render("failure")
-            } else {
-                res.render('cardpage', {
-                    pokemonImg: result.data[0].images,
-                    pokemonName: result.data[0].name,
-                    pokemonHP: result.data[0], 
-                    pokemonTypes: result.data[0],
-                    pokemonFrom: result.data[0],
-                    pokemonEvos: result.data[0],
-                    pokemonWeak: result.data[0],
-                    pokemonRarity: result.data[0].rarity,
-                    tcgLink: result.data[0].tcgplayer.url,
-                    cardMarket: result.data[0].cardmarket.url,
-                    cardArtist: result.data[0].artist,
-                    cardId: pokemonId,
-                    inCollection: inCollection
-                });
-                res.end();
-            }
-        }
-    );
-
-});
-
+// handles removing card from collection and redirects to collection on success
 app.post("/removeFromCollection", (req, res) => {
     let id = req.session.passport.user.id;
     
@@ -309,7 +364,6 @@ app.post("/removeFromCollection", (req, res) => {
         if(err) {
             console.log(err);
         } else {
-            console.log("Successfully updated ID");
             Collection.findByIdAndUpdate(id, {$pull: {cards: {cardId: "REMOVE"}}}, function(err, docs) {
                 if(err) {
                     console.log(err);
@@ -350,7 +404,6 @@ app.post("/pageStyle", (req, res) => {
             }
         ); 
     } else {
-        //TODO: HANDLE LIST VIEW
         curStyle = "list";
         pokemon.card.where({ q: `name:${curPokemon}`}).then(
             result => {
@@ -379,15 +432,7 @@ app.post("/pageStyle", (req, res) => {
     }
 });
 
-app.get("/failure", (req, res) => {
-    res.render("failure");
-});
-
+// set up server to listen on port ***
 app.listen(process.env.PORT || port, (req, res) => {
     console.log(`Listening on port: ${port}`);
 });
-
-
-function helper(id) {
-
-}

@@ -3,7 +3,7 @@
 <div class="search-results collection-pg background-img">
     <div class="container">
         <div class="row gy-1">
-            <% for(let i = 0; i < cardArr.length; ++i) { %>
+            <% for(let i = startIndex; i < endIndex; ++i) { %>
                 <div class="col-lg-3 col-md-6">
                     <form action="/cardpage" method="POST">
                         <a href="/cardpage/<%= cardArr[i].cardId %>"><img class="search-img" src="<%= cardArr[i].cardImg %>" alt="..."></a>
@@ -12,9 +12,28 @@
             <% } %>
         </div>   
     </div>
+    <div class="pagination-thing pagination-background">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <form class="pagination-form pagination" action="/collection/:page" method="POST">
+                <% for(let i = 0; i < Math.ceil(numOfResults / 24); ++i) { %>
+                    <% if(Number(activeBtn) === Number(i+1)) { %>
+                        <li class="page-item"><button class="page-link page-link-list active btn pagination-btn list-pagination-btn" name="nextBtn" value="<%=i+1%>"><span class="pls"><%= i + 1 %></span></button></li> 
+                    <%  } else if(activeBtn === undefined) { %>
+                        <li class="page-item"><button class="page-link page-link-list active btn pagination-btn list-pagination-btn" name="nextBtn" value="<%=i+1%>"><span class="pls"><%= i + 1 %></span></button></li> 
+                        <%activeBtn = -1;%>
+                    <%  } else { %>
+                        <li class="page-item"><button class="page-link page-link-list btn pagination-btn list-pagination-btn" name="nextBtn" value="<%=i+1%>"><%= i + 1 %></button></li>
+                    <% } %>
+                <%}%>
+                </form>
+            </ul>
+          </nav>
+    </div>
     <div class="row logout-collection">
         <a class="btn btn-dark logout-btn" href="/logout" role="button">Log Out</a>
     </div>
 </div>
+
 
 <%- include("footer") -%>

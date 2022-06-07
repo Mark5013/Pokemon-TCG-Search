@@ -75,12 +75,12 @@
         </div>
         <% if(!inCollection) { %>
             <form action="/addToCollection" method="POST">
-                <button type="submit" name="addBtn" value="<%=cardId%>">Add</button>
+                <button class="btn btn-primary btn-lg" type="submit" name="addBtn" value="<%=cardId%>">Add</button>
                 <input type="hidden" name="cardImg" value="<%=pokemonImg.small%>">
             </form>
         <% } else { %>
             <form action="/removeFromCollection" method="POST">
-                <button type="submit" name="removeBtn" value="<%=cardId%>">Remove</button>
+                <button class="btn btn-primary btn-lg" type="submit" name="removeBtn" value="<%=cardId%>">Remove</button>
             </form>
         <% } %>
     </div>   

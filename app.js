@@ -39,7 +39,8 @@ app.use(passport.initialize());
 // tell pasport to deal with sessions
 app.use(passport.session());
 
-mongoose.connect(`mongodb+srv://admin-mark:${password}@cluster0.vgavw.mongodb.net/collectionDB`);
+// mongoose.connect(`mongodb+srv://admin-mark:${password}@cluster0.vgavw.mongodb.net/collectionDB`);
+mongoose.connect("mongodb://localhost:27017/collectionDB");
 
 const  collectionSchema = new mongoose.Schema({
     username: String,
@@ -70,7 +71,8 @@ passport.deserializeUser(function(user, cb) {
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "https://whispering-retreat-18765.herokuapp.com/auth/google/pokemon"
+    // callbackURL: "https://whispering-retreat-18765.herokuapp.com/auth/google/pokemon"
+    callbackURL: "http://localhost:3000/auth/google/pokemon"
   },
   function(accessToken, refreshToken, profile, cb) {
     Collection.findOrCreate({ username: profile.displayName, googleId: profile.id}, function (err, user) {
@@ -81,13 +83,11 @@ passport.use(new GoogleStrategy({
 
 // render home page
 app.get("/", (req,res) => {
-    console.log(req.session);
     if(req.session.hasOwnProperty("passport")) {
         res.render("index", {loggedIn: true});
     } else {
         res.render("index", {loggedIn: false});
-    }
-    
+    }  
 });
 
 app.get("/auth/google", passport.authenticate('google', {
@@ -256,6 +256,21 @@ app.post("/search/:page", (req, res) => {
 
 //dynamically render cardpage based off of cardID
 app.get("/cardpage/:cardID", (req, res) => {
+    let inCollection = false;
+
+    if(req.session.hasOwnProperty("passport")) {
+        const id = req.session.passport.user.id;
+        Collection.find({"_id": id, "cards.cardId": req.params.cardID}, function(err, docs) {
+            if(err) {
+                console.log(err);
+            } else if(docs.length === 1) {
+                inCollection = true;
+            } else {
+                inCollection = false;
+            }
+        });
+    };
+
     let pokemonId = req.params.cardID;
 
     pokemon.card.where({ q: `id:${pokemonId}`}).then(
@@ -264,7 +279,7 @@ app.get("/cardpage/:cardID", (req, res) => {
                 res.render("failure")
             } else {
                 res.render('cardpage', {
-                    pokemonImg: result.data[0].images.large,
+                    pokemonImg: result.data[0].images,
                     pokemonName: result.data[0].name,
                     pokemonHP: result.data[0], 
                     pokemonTypes: result.data[0],
@@ -276,12 +291,34 @@ app.get("/cardpage/:cardID", (req, res) => {
                     cardMarket: result.data[0].cardmarket.url,
                     cardArtist: result.data[0].artist,
                     cardId: pokemonId,
+                    inCollection: inCollection
                 });
                 res.end();
             }
         }
-    )
+    );
 
+});
+
+app.post("/removeFromCollection", (req, res) => {
+    let id = req.session.passport.user.id;
+    
+    // CURSED CODE THAT REMOVES ONLY ONE CARD IN CASE OF DUPLICATES
+    // actually updates one card ID to "REMOVE" then performs another query and removes the card ID with "REMOVE", why is this not a function already
+    Collection.findOneAndUpdate({"_id": id, "cards.cardId": req.body.removeBtn},{$set: {"cards.$.cardId": "REMOVE"}}, function(err, docs) {
+        if(err) {
+            console.log(err);
+        } else {
+            console.log("Successfully updated ID");
+            Collection.findByIdAndUpdate(id, {$pull: {cards: {cardId: "REMOVE"}}}, function(err, docs) {
+                if(err) {
+                    console.log(err);
+                } else {
+                    res.redirect("/collection");
+                }
+            });
+        }
+    });  
 });
 
 // HANDLE PAGE LAYOUT

@@ -177,7 +177,6 @@ form {
 
 .list-card-link {
     text-decoration: none;
-    color: white;
 }
 
 .table {
@@ -187,15 +186,6 @@ form {
 
 .set-symbol {
     width: 25px;
-}
-
-.pagination-background {
-    background-color: #2f4353;
-    background-image: linear-gradient(360deg,#2f4353 0%, #d2ccc4 74%);
-}
-
-.list-text {
-    color: white;
 }
 
 nav {
@@ -208,18 +198,8 @@ nav {
     text-align: center;
 }
 
-.list-search-space {
-    background-color: #2f4353;
-    background-image: linear-gradient(180deg, #2f4353 0%, #d2ccc4 74%);
-}
-
-.page-link-list {
-    background-color: black;
-    color: white;
-}
-
-.list-pagination-btn:hover, .list-pagination-btn:focus {
-    color: black;
+.list-add-form {
+    text-align: center;
 }
 
 

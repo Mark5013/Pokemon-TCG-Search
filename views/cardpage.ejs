@@ -11,7 +11,7 @@
     <div class="card-page container">
         <div class="row">
             <div class="col-lg-6 card-pic-div">
-                <img class="large-img" src="<%= pokemonImg %>" rel="whatever pokemon clicked on">
+                <img class="large-img" src="<%= pokemonImg.large %>" rel="whatever pokemon clicked on">
             </div>
             <div class="col-lg-6">
                 <div class="pokemon-info card">
@@ -73,7 +73,17 @@
                 </div>
             </div>
         </div>
-    </div>
+        <% if(!inCollection) { %>
+            <form action="/addToCollection" method="POST">
+                <button type="submit" name="addBtn" value="<%=cardId%>">Add</button>
+                <input type="hidden" name="cardImg" value="<%=pokemonImg.small%>">
+            </form>
+        <% } else { %>
+            <form action="/removeFromCollection" method="POST">
+                <button type="submit" name="removeBtn" value="<%=cardId%>">Remove</button>
+            </form>
+        <% } %>
+    </div>   
 </div>
 
 <%- include("footer") -%>

@@ -42,6 +42,7 @@ app.use(passport.session());
 mongoose.connect(`mongodb+srv://admin-mark:${password}@cluster0.vgavw.mongodb.net/collectionDB`);
 
 const  collectionSchema = new mongoose.Schema({
+    username: String,
     googleId: String,
     cards: [{cardId: String, cardImg: String}]
 });
@@ -72,7 +73,7 @@ passport.use(new GoogleStrategy({
     callbackURL: "https://whispering-retreat-18765.herokuapp.com/auth/google/pokemon"
   },
   function(accessToken, refreshToken, profile, cb) {
-    Collection.findOrCreate({ googleId: profile.id}, function (err, user) {
+    Collection.findOrCreate({ username: profile.displayName, googleId: profile.id}, function (err, user) {
       return cb(err, user);
     });
   }

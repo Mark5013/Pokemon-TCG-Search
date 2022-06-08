@@ -158,7 +158,7 @@ app.get("/cardpage/:cardID", (req, res) => {
         Collection.find({"_id": id, "cards.cardId": req.params.cardID}, function(err, docs) {
             if(err) {
                 console.log(err);
-            } else if(docs.length === 1) {
+            } else if(docs.length >= 1) {
                 inCollection = true;
             } else {
                 inCollection = false;

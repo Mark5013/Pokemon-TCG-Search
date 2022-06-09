@@ -51,7 +51,12 @@
                             N/A
                         <% } else { %>
                             <% for(let i = 0; i < pokemonEvos.evolvesTo.length; ++i) { %>
-                                <%= pokemonEvos.evolvesTo[i] %>
+                                <%if(i === pokemonEvos.evolvesTo.length - 1) { %>
+                                    <%= pokemonEvos.evolvesTo[i] %>
+                              <%  } else { %>
+                                <%=pokemonEvos.evolvesTo[i]%>,
+                              <%  } %>
+                                
                             <% } %>
                         <% } %>
                         </p>
@@ -61,7 +66,11 @@
                                 N/A
                             <% } else { %>
                                 <% for(let i = 0; i < pokemonWeak.weaknesses.length; ++i) { %>
-                                    <%= pokemonWeak.weaknesses[i].type %> | Value: <%= pokemonWeak.weaknesses[i].value %>
+                                    <% if(i === pokemonWeak.weaknesses.length - 1) { %>
+                                        <%= pokemonWeak.weaknesses[i].type %> | Value: <%= pokemonWeak.weaknesses[i].value %>
+                                    <% } else { %>
+                                        <%= pokemonWeak.weaknesses[i].type %> | Value: <%= pokemonWeak.weaknesses[i].value %>,
+                                    <% } %>
                                 <% } %>
                             <% } %>
                             </p>
